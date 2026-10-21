@@ -4,8 +4,8 @@
   "description": "FORMA — Concept interior design and renovation studio",
   "scripts": {
     "dev": "next dev --hostname 0.0.0.0",
-    "build": "next build",
-    "start": "next start --hostname 0.0.0.0",
+    "build": "next build && node scripts/check-static-export.mjs",
+    "start": "npx --yes serve out --listen 3000 --no-clipboard",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "test": "tsx --test tests/estimate.test.ts",

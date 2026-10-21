@@ -4,7 +4,7 @@
 
 ## ChatGPT Sites
 
-В репозитории находится Next.js-проект для локальной разработки и Vercel с актуальным дизайном опубликованного сайта. Отдельная служебная копия для ChatGPT Sites хранится локально в `sites/forma/` и исключена из Git вместе с архивами публикаций. Подробнее о текущей публикации — [docs/SITES.md](docs/SITES.md).
+В репозитории находится Next.js-проект со статическим экспортом для Cloudflare Pages и Vercel с актуальным дизайном опубликованного сайта. Отдельная служебная копия для ChatGPT Sites хранится локально в `sites/forma/` и исключена из Git вместе с архивами публикаций. Подробнее о текущей публикации — [docs/SITES.md](docs/SITES.md).
 
 Публичный адрес сборки: https://forma-interior-studio.wirybream10.chatgpt.site (доступ определяется настройками Sites).
 
@@ -25,6 +25,8 @@ Production-сборка и локальный просмотр:
 npm run build
 npm start
 ```
+
+Сборка создаёт `out/` с готовыми HTML/CSS/JS и фотографиями. `npm start` обслуживает эту папку на http://localhost:3000. Серверный `next start` несовместим с `output: 'export'`. Для статического хостинга в конфигурации отключён серверный оптимизатор изображений (`images.unoptimized: true`).
 
 ## Проверки
 
@@ -76,15 +78,32 @@ Before / After использует два отдельных изображен
 
 Фото портфолио: [Unsplash License](https://unsplash.com/license), источники на /credits. Галереи содержат независимые референсы. Новая пара Before / After предоставлена владельцем; автор и исходная публикация не указаны, открытая лицензия не заявляется. Оригиналы — public/images/comparison-before.png и comparison-after.png; скрипт scripts/prepare-comparison.mjs создаёт lossless WebP.
 
+## Публикация на Cloudflare Pages
+
+В настройках Git-проекта Cloudflare Pages:
+
+- Production branch: `main`.
+- Framework preset: **Next.js (Static HTML Export)**.
+- Root directory: корень репозитория (оставьте пустым).
+- Build command: `npm run build`.
+- Build output directory: `out`.
+- Node.js: `22.x` (окружение из лога с Node.js 22.16.0 подходит).
+
+`npm run build` выполняет `next build` и проверяет наличие `out/index.html`, `out/404.html` и `out/_next/`. Также работает `npx next build`, но без дополнительной проверки результата. Для этого frontend-проекта Workers, адаптер Next.js и Wrangler не требуются.
+
+После изменения настроек запускайте новую сборку текущей ветки `main`. **Retry deployment** старого коммита повторит сборку его прежних файлов. Если в логе указан `8d7fd06`, это исходная версия без статического экспорта; в коммите `3ed0254` уже включён `output: 'export'`.
+
+Справка: [Cloudflare Pages — Next.js static export](https://developers.cloudflare.com/pages/framework-guides/nextjs/deploy-a-static-nextjs-site/), [Next.js — Static Exports](https://nextjs.org/docs/app/guides/static-exports).
+
 ## Публикация на Vercel
 
 1. Поместите репозиторий в свой GitHub/GitLab/Bitbucket.
 2. В Vercel выберите **Add New → Project** и импортируйте репозиторий.
 3. Framework Preset: **Next.js**. Root Directory: корень проекта. Install Command: `npm ci`. Build Command: `npm run build`. Output Directory оставьте стандартной.
 4. Используйте Node.js 22.x. Переменные окружения не обязательны. Для собственного домена задайте `NEXT_PUBLIC_SITE_URL=https://your-domain.example` и выполните redeploy; иначе используется production URL Vercel.
-5. Нажмите **Deploy**. Vercel обслуживает Next Image и все маршруты без дополнительной настройки.
+5. Нажмите **Deploy**. Vercel обслуживает статический экспорт и все маршруты без дополнительной настройки.
 
-Альтернативно из корня проекта: `npx vercel` для preview, затем `npx vercel --prod` для production (нужен ваш вход в Vercel). Репозиторий использует стандартную сборку Next.js; отдельная версия для Sites использует статический экспорт.
+Альтернативно из корня проекта: `npx vercel` для preview, затем `npx vercel --prod` для production (нужен ваш вход в Vercel). Репозиторий и отдельная версия для Sites используют статический экспорт.
 
 По умолчанию задан `robots: { index: false, follow: true }`, поскольку это демонстрационная компания. Перед публикацией в составе индексируемого портфолио можно изменить это в `app/layout.tsx`. Не добавляйте вымышленные отзывы, адреса и подтверждения реального опыта. Для настоящей студии потребуется отдельно согласованный backend и реальная обработка заявок.
 
