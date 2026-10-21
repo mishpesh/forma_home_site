@@ -1,0 +1,157 @@
+/* An editorial photograph balances the studio introduction. */
+.intro {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+  grid-template-areas: 'label content' 'image content';
+  grid-template-rows: auto 1fr;
+  column-gap: clamp(48px, 5vw, 96px);
+  row-gap: 36px;
+  align-items: start;
+}
+.intro-label {
+  grid-area: label;
+}
+.intro-photo {
+  grid-area: image;
+  width: 100%;
+}
+.intro-photo figure {
+  margin: 0;
+}
+.intro-photo-frame {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+}
+.intro-photo-frame img {
+  object-fit: cover;
+  object-position: center 60%;
+}
+.intro-photo figcaption {
+  margin-top: 14px;
+  font-size: 11px;
+  line-height: 1.5;
+  opacity: 0.65;
+}
+.intro-content {
+  grid-area: content;
+  min-width: 0;
+  align-self: center;
+}
+@media (min-width: 701px) and (max-width: 1000px) {
+  .intro {
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.4fr);
+    column-gap: 36px;
+  }
+  .intro-content {
+    margin-left: 0;
+  }
+}
+@media (max-width: 700px) {
+  .intro {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: 'label' 'content' 'image';
+    grid-template-rows: auto;
+    gap: 28px;
+  }
+  .intro-content {
+    margin-left: 0;
+  }
+  .intro-photo {
+    max-width: 480px;
+    margin-top: 8px;
+  }
+  .intro-photo-frame {
+    aspect-ratio: 5 / 4;
+  }
+}
+
+/* Keep the current Before / After frames exactly as supplied. */
+.comparison-wrap {
+  max-width: 1200px;
+}
+.comparison {
+  aspect-ratio: 1672 / 941;
+}
+.comparison-image.before {
+  background-image: url('/images/comparison-before-scandi.webp');
+}
+.comparison-image.after {
+  background-image: url('/images/comparison-after-scandi.webp');
+}
+
+/* Photographs provide the atmosphere; the surrounding surfaces stay quiet. */
+.interior-atmosphere {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 16px;
+  padding-top: 16px;
+  padding-bottom: 32px;
+}
+.interior-atmosphere figure {
+  margin: 0;
+  min-width: 0;
+}
+.atmosphere-frame {
+  position: relative;
+  overflow: hidden;
+  height: clamp(400px, 42vw, 640px);
+  background: var(--bone);
+}
+.atmosphere-image {
+  position: absolute;
+  inset: -6% 0;
+  will-change: transform;
+}
+.atmosphere-frame img {
+  object-fit: cover;
+  object-position: center;
+}
+.atmosphere-bathroom img {
+  object-position: 58% center;
+}
+.interior-atmosphere figcaption {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 24px 0;
+  font-size: 12px;
+  line-height: 1.6;
+}
+.interior-atmosphere figcaption span:last-child {
+  opacity: 0.7;
+  text-align: right;
+}
+@media (max-width: 1000px) {
+  .interior-atmosphere figcaption {
+    flex-direction: column;
+    gap: 4px;
+  }
+}
+@media (max-width: 700px) {
+  .interior-atmosphere {
+    grid-template-columns: 1fr;
+    gap: 28px;
+    padding-top: 0;
+    padding-bottom: 12px;
+  }
+  .atmosphere-frame {
+    height: auto;
+    aspect-ratio: 4 / 3;
+  }
+  .atmosphere-bathroom {
+    aspect-ratio: 1.65;
+  }
+  .interior-atmosphere figcaption {
+    flex-direction: row;
+    gap: 16px;
+    padding-inline: var(--gutter);
+    font-size: 12px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .atmosphere-image {
+    transform: none !important;
+    will-change: auto;
+  }
+}
